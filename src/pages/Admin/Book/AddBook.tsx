@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
+import { Dropdown, DropdownButton } from 'react-bootstrap';
 import { validateBook } from './validateBook';
 
 function Book() {
@@ -14,28 +15,28 @@ function Book() {
     }
 
     interface Author {
-        id: number;
+        authorId: number;
         name: string;
     }
 
-    interface BookState {
+    interface Book {
         isbn: string;
         title: string;
         genre: string;
         numberOfPages: number;
         numberOfCopies: number;
-        authors: string[];
+        authorIds: number[];
     }
 
     const [authors, setAuthors] = useState<Author[]>([]);;
 
-    const [book, setBook] = useState<BookState>({
+    const [book, setBook] = useState<Book>({
         isbn: '',
         title: '',
         genre: '',
         numberOfPages: 0,
         numberOfCopies: 0,
-        authors: []
+        authorIds: []
     });
 
     const [errors, setErrors] = useState<{
@@ -116,13 +117,13 @@ function Book() {
                     </div>
                     <div className="form-group mt-3">
                         <label htmlFor="genreBook">Genre:</label>
-                        <select id="genreBook" className="form-control" name="genre" onChange={(e) => setBook({ ...book, genre: e.target.value })} value={book.genre || ""}>
+                        <DropdownButton id="genreBook" title={"Please select a genre"} onSelect={(selectedGenre) => setBook({ ...book, genre: selectedGenre || "" })} variant="outline-secondary">
                             {Object.keys(BookGenre).map((genreKey) => (
-                                <option key={genreKey} value={genreKey}>
+                                <Dropdown.Item key={genreKey} eventKey={genreKey}>
                                     {BookGenre[genreKey as keyof typeof BookGenre]}
-                                </option>
+                                </Dropdown.Item>
                             ))}
-                        </select>
+                        </DropdownButton>
                         <span className="text-danger">{errors.genre}</span>
                     </div>
                     <div className="form-group mt-3">
@@ -137,9 +138,9 @@ function Book() {
                     </div>
                     <div className="form-group mt-3">
                         <label htmlFor="authorsBook">Authors:</label>
-                        <select id="authorsBook" className="form-control" name="authors" multiple onChange={(e) => { const selectedAuthors = Array.from(e.target.selectedOptions, option => option.value); setBook({ ...book, authors: selectedAuthors }); }} value={book.authors || []}>
+                        <select id="authorsBook" className="form-control" name="authors" multiple onChange={(e) => { const selectedAuthorIds = Array.from(e.target.selectedOptions, option => parseInt(option.value, 10)); setBook({ ...book, authorIds: selectedAuthorIds }); }} value={book.authorIds.map(String)}>
                             {authors.map((author) => (
-                                <option key={author.id} value={author.id}>
+                                <option key={author.authorId} value={author.authorId}>
                                     {author.name}
                                 </option>
                             ))}

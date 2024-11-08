@@ -4,7 +4,7 @@ export async function validateBook(book: {
     genre: string,
     numberOfPages: number,
     numberOfCopies: number,
-    authors: string[]
+    authorIds: number[]
 }) {
     const errors: {
         isbn?: string,
@@ -12,7 +12,7 @@ export async function validateBook(book: {
         genre?: string,
         numberOfPages?: string,
         numberOfCopies?: string,
-        authors?: string
+        authorIds?: string
     } = {};
 
     if (!book.isbn || book.isbn.length === 0) {
@@ -44,8 +44,8 @@ export async function validateBook(book: {
         errors.numberOfCopies = "The number of pages for the book has to be a positive integer."
     }
 
-    if (!book.authors || book.authors.length < 1)
-        errors.authors = "The author/authors of the book is/are required."
+    if (!book.authorIds || book.authorIds.length < 1)
+        errors.authorIds = "The author/authors of the book is/are required."
 
     return errors;
 }
