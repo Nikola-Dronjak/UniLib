@@ -14,27 +14,24 @@ function Books() {
     const [books, setBooks] = useState<Book[]>([]);
 
     useEffect(() => {
-        const fetchAuthors = async () => {
-            try {
-                const token = localStorage.getItem('authToken');
-                const response = await axios.get('http://localhost:8080/api/authors', {
-                    headers: {
-                        'x-auth-token': token,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                setAuthors(response.data);
-            } catch (error) {
-                toast.error("Failed to fetch authors.");
-            }
-        };
-
         fetchAuthors();
-    }, []);
-
-    useEffect(() => {
         fetchBooks();
     }, []);
+
+    const fetchAuthors = async () => {
+        try {
+            const token = localStorage.getItem('authToken');
+            const response = await axios.get('http://localhost:8080/api/authors', {
+                headers: {
+                    'x-auth-token': token,
+                    'Content-Type': 'application/json'
+                }
+            });
+            setAuthors(response.data);
+        } catch (error) {
+            toast.error("Failed to fetch authors.");
+        }
+    };
 
     const fetchBooks = async () => {
         try {

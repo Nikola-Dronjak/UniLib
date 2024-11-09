@@ -1,4 +1,5 @@
 import './App.css';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Register from './pages/Register/Register';
 import Login from './pages/Login/Login';
@@ -14,16 +15,28 @@ import UpdateBook from './pages/Admin/Book/UpdateBook';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
-    const token = localStorage.getItem('authToken');
-    const userRole = token ? JSON.parse(atob(token.split('.')[1])).role : null;
-    const isAuthenticated = !!token;
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [userRole, setUserRole] = useState<string | null>(null);
+
+    useEffect(() => {
+        setAuthState();
+    }, []);
+
+    const setAuthState = () => {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            const decodedToken = JSON.parse(atob(token.split('.')[1]));
+            setUserRole(decodedToken.role);
+            setIsAuthenticated(true);
+        }
+    };
 
     return (
         <BrowserRouter>
             <Routes>
                 <Route index element={<Navigate to="/home" replace />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register setAuthState={setAuthState} />} />
+                <Route path="/login" element={<Login setAuthState={setAuthState} />} />
                 <Route path="/home" element={<Home />} />
 
                 <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} allowedRoles={['STUDENT']} userRole={userRole} />}>

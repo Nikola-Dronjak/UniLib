@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import NavBar from '../../components/NavBar';
 import { validateRegister } from './validateRegister';
 
-function Register() {
+interface LoginProps {
+    setAuthState: () => void;
+}
+
+const Register: FC<LoginProps> = ({ setAuthState }) => {
     const navigate = useNavigate();
 
     const [user, setUser] = useState({
@@ -38,6 +42,7 @@ function Register() {
                     if (response.status === 200) {
                         const token = response.data;
                         localStorage.setItem('authToken', token);
+                        setAuthState();
                         navigate('/home');
                     }
                 })

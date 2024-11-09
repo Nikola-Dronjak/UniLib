@@ -23,23 +23,23 @@ function UpdateAuthor() {
     }>({});
 
     useEffect(() => {
-        const fetchAuthor = async () => {
-            try {
-                const token = localStorage.getItem('authToken');
-                const response = await axios.get(`http://localhost:8080/api/authors/${authorId}`, {
-                    headers: {
-                        'x-auth-token': token,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                setAuthor(response.data);
-            } catch (error) {
-                toast.error("Failed to fetch author information.");
-            }
-        };
-
         fetchAuthor();
     }, []);
+
+    const fetchAuthor = async () => {
+        try {
+            const token = localStorage.getItem('authToken');
+            const response = await axios.get(`http://localhost:8080/api/authors/${authorId}`, {
+                headers: {
+                    'x-auth-token': token,
+                    'Content-Type': 'application/json'
+                }
+            });
+            setAuthor(response.data);
+        } catch (error) {
+            toast.error("Failed to fetch author information.");
+        }
+    };
 
     async function updateAuthor(e: React.FormEvent) {
         e.preventDefault();

@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import NavBar from '../../components/NavBar';
 import { validateLogin } from './validateLogin';
 
-function Login() {
+interface LoginProps {
+    setAuthState: () => void;
+}
+
+const Login: FC<LoginProps> = ({ setAuthState }) => {
     const navigate = useNavigate();
 
     const [user, setUser] = useState({
@@ -32,6 +36,7 @@ function Login() {
                     if (response.status === 200) {
                         const token = response.data;
                         localStorage.setItem('authToken', token);
+                        setAuthState();
                         navigate('/home');
                     }
                 })

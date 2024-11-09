@@ -35,42 +35,39 @@ function UpdateBook() {
     }>({});
 
     useEffect(() => {
-        const fetchBook = async () => {
-            try {
-                const token = localStorage.getItem('authToken');
-                const response = await axios.get(`http://localhost:8080/api/books/${isbn}`, {
-                    headers: {
-                        'x-auth-token': token,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                setBook(response.data);
-            } catch (error) {
-                toast.error("Failed to fetch book information.");
-            }
-        };
-
+        fetchAuthors();
         fetchBook();
     }, []);
 
-    useEffect(() => {
-        const fetchAuthors = async () => {
-            try {
-                const token = localStorage.getItem('authToken');
-                const response = await axios.get('http://localhost:8080/api/authors', {
-                    headers: {
-                        'x-auth-token': token,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                setAuthors(response.data);
-            } catch (error) {
-                toast.error("Failed to fetch authors.");
-            }
-        };
+    const fetchAuthors = async () => {
+        try {
+            const token = localStorage.getItem('authToken');
+            const response = await axios.get('http://localhost:8080/api/authors', {
+                headers: {
+                    'x-auth-token': token,
+                    'Content-Type': 'application/json'
+                }
+            });
+            setAuthors(response.data);
+        } catch (error) {
+            toast.error("Failed to fetch authors.");
+        }
+    };
 
-        fetchAuthors();
-    }, []);
+    const fetchBook = async () => {
+        try {
+            const token = localStorage.getItem('authToken');
+            const response = await axios.get(`http://localhost:8080/api/books/${isbn}`, {
+                headers: {
+                    'x-auth-token': token,
+                    'Content-Type': 'application/json'
+                }
+            });
+            setBook(response.data);
+        } catch (error) {
+            toast.error("Failed to fetch book information.");
+        }
+    };
 
     async function updateBook(e: React.FormEvent) {
         e.preventDefault();

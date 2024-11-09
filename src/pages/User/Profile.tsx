@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
-import { User } from '../../interfaces/User';
 import NavBar from '../../components/NavBar';
+import { User } from '../../interfaces/User';
 import { validateRegister } from '../Register/validateRegister';
 
 function Profile() {
@@ -28,23 +28,23 @@ function Profile() {
     }>({});
 
     useEffect(() => {
-        const fetchUserDetails = async () => {
-            const token = localStorage.getItem('authToken');
-            if (!token)
-                return;
-
-            const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const response = await axios.get(`http://localhost:8080/api/users/${decodedToken.sub}`, {
-                headers: {
-                    'x-auth-token': token,
-                    'Content-Type': 'application/json'
-                }
-            });
-            setUser(response.data);
-        };
-
         fetchUserDetails();
     }, []);
+
+    const fetchUserDetails = async () => {
+        const token = localStorage.getItem('authToken');
+        if (!token)
+            return;
+
+        const decodedToken = JSON.parse(atob(token.split('.')[1]));
+        const response = await axios.get(`http://localhost:8080/api/users/${decodedToken.sub}`, {
+            headers: {
+                'x-auth-token': token,
+                'Content-Type': 'application/json'
+            }
+        });
+        setUser(response.data);
+    };
 
     async function updateUser(e: React.FormEvent) {
         e.preventDefault();

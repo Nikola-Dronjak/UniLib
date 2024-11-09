@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
+import NavBar from '../components/NavBar';
 import { AuthorBook } from '../interfaces/Author';
 import { Book } from '../interfaces/Book';
 import { User } from '../interfaces/User';
-import NavBar from '../components/NavBar';
 
 function Home() {
     const [authors, setAuthors] = useState<AuthorBook[]>([]);
@@ -22,21 +22,19 @@ function Home() {
     });
 
     useEffect(() => {
-        const fetchAuthors = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/api/authors');
-                setAuthors(response.data);
-            } catch (error) {
-                toast.error("Failed to fetch authors.");
-            }
-        };
-
         fetchAuthors();
+        fetchBooks();
+        fetchUserDetails();
     }, []);
 
-    useEffect(() => {
-        fetchBooks();
-    }, []);
+    const fetchAuthors = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/authors');
+            setAuthors(response.data);
+        } catch (error) {
+            toast.error("Failed to fetch authors.");
+        }
+    };
 
     const fetchBooks = async () => {
         try {
@@ -47,24 +45,20 @@ function Home() {
         }
     };
 
-    useEffect(() => {
-        const fetchUserDetails = async () => {
-            const token = localStorage.getItem('authToken');
-            if (!token)
-                return;
+    const fetchUserDetails = async () => {
+        const token = localStorage.getItem('authToken');
+        if (!token)
+            return;
 
-            const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const response = await axios.get(`http://localhost:8080/api/users/${decodedToken.sub}`, {
-                headers: {
-                    'x-auth-token': token,
-                    'Content-Type': 'application/json'
-                }
-            });
-            setUser(response.data);
-        };
-
-        fetchUserDetails();
-    }, []);
+        const decodedToken = JSON.parse(atob(token.split('.')[1]));
+        const response = await axios.get(`http://localhost:8080/api/users/${decodedToken.sub}`, {
+            headers: {
+                'x-auth-token': token,
+                'Content-Type': 'application/json'
+            }
+        });
+        setUser(response.data);
+    };
 
     const loanBook = async (isbn: string, title: string) => {
         try {

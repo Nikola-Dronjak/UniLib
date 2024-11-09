@@ -34,23 +34,23 @@ function AddBook() {
     }>({});
 
     useEffect(() => {
-        const fetchAuthors = async () => {
-            try {
-                const token = localStorage.getItem('authToken');
-                const response = await axios.get('http://localhost:8080/api/authors', {
-                    headers: {
-                        'x-auth-token': token,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                setAuthors(response.data);
-            } catch (error) {
-                toast.error("Failed to fetch authors.");
-            }
-        };
-
         fetchAuthors();
     }, []);
+
+    const fetchAuthors = async () => {
+        try {
+            const token = localStorage.getItem('authToken');
+            const response = await axios.get('http://localhost:8080/api/authors', {
+                headers: {
+                    'x-auth-token': token,
+                    'Content-Type': 'application/json'
+                }
+            });
+            setAuthors(response.data);
+        } catch (error) {
+            toast.error("Failed to fetch authors.");
+        }
+    };
 
     async function addBook(e: React.FormEvent) {
         e.preventDefault();

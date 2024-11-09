@@ -9,23 +9,23 @@ function NavBar() {
     const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
-        const fetchUserDetails = async () => {
-            const token = localStorage.getItem('authToken');
-            if (!token)
-                return;
-
-            const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const response = await axios.get(`http://localhost:8080/api/users/${decodedToken.sub}`, {
-                headers: {
-                    'x-auth-token': token,
-                    'Content-Type': 'application/json'
-                }
-            });
-            setUser(response.data);
-        };
-
         fetchUserDetails();
     }, []);
+
+    const fetchUserDetails = async () => {
+        const token = localStorage.getItem('authToken');
+        if (!token)
+            return;
+
+        const decodedToken = JSON.parse(atob(token.split('.')[1]));
+        const response = await axios.get(`http://localhost:8080/api/users/${decodedToken.sub}`, {
+            headers: {
+                'x-auth-token': token,
+                'Content-Type': 'application/json'
+            }
+        });
+        setUser(response.data);
+    };
 
     const handleLogout = () => {
         localStorage.removeItem('authToken');

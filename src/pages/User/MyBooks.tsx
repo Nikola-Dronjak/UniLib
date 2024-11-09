@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
+import NavBar from '../../components/NavBar';
 import { AuthorBook } from '../../interfaces/Author';
 import { Book } from '../../interfaces/Book';
 import { User } from '../../interfaces/User';
-import NavBar from '../../components/NavBar';
 
 function MyBooks() {
     const [authors, setAuthors] = useState<AuthorBook[]>([]);
@@ -22,21 +22,18 @@ function MyBooks() {
     });
 
     useEffect(() => {
-        const fetchAuthors = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/api/authors');
-                setAuthors(response.data);
-            } catch (error) {
-                toast.error("Failed to fetch authors.");
-            }
-        };
-
         fetchAuthors();
-    }, []);
-
-    useEffect(() => {
         fetchMyBooks();
     }, []);
+
+    const fetchAuthors = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/authors');
+            setAuthors(response.data);
+        } catch (error) {
+            toast.error("Failed to fetch authors.");
+        }
+    };
 
     const fetchMyBooks = async () => {
         try {
