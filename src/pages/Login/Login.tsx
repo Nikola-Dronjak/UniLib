@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
+import axios from 'axios';
+import NavBar from '../../components/NavBar';
 import { validateLogin } from './validateLogin';
 
 function Login() {
+    const navigate = useNavigate();
+
     const [user, setUser] = useState({
         email: '',
         password: ''
@@ -14,8 +17,6 @@ function Login() {
         email?: string;
         password?: string;
     }>({});
-
-    const navigate = useNavigate();
 
     async function handleLogin(e: React.FormEvent) {
         e.preventDefault();
@@ -30,14 +31,8 @@ function Login() {
                 .then((response) => {
                     if (response.status === 200) {
                         const token = response.data;
-                        const decodedToken = JSON.parse(atob(token.split('.')[1]));
                         localStorage.setItem('authToken', token);
-
-                        if (decodedToken.role === "ADMINISTRATOR") {
-                            navigate('/admin');
-                        } else {
-                            navigate('/home');
-                        }
+                        navigate('/home');
                     }
                 })
                 .catch((err) => {
@@ -48,35 +43,38 @@ function Login() {
     }
 
     return (
-        <div className="bg-light d-flex align-items-center justify-content-center" style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5))`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center center',
-            height: '100vh',
-            margin: 0,
-        }}>
-            <div className="card p-4">
-                <form onSubmit={handleLogin}>
-                    <div className="form-group mt-3">
-                        <label htmlFor="emailLogin">Email:</label>
-                        <input type="text" id="emailLogin" className="form-control" placeholder="Enter your email address" name="email" onChange={(e) => setUser({ ...user, email: e.target.value?.trim() || '' })} />
-                        <span className="text-danger">{errors.email}</span>
-                    </div>
-                    <div className="form-group mt-3">
-                        <label htmlFor="passwordLogin">Password:</label>
-                        <input type="password" id="passwordLogin" className="form-control" placeholder="Enter your password" name="password" onChange={(e) => setUser({ ...user, password: e.target.value?.trim() || '' })} />
-                        <span className="text-danger">{errors.password}</span>
-                    </div>
-                    <div className="col text-center">
-                        <button type="submit" className="btn btn-primary mt-4">Login</button>
-                    </div>
-                </form>
-                <p className="mt-3 text-center">
-                    Don't have an account? <a href="/register">Register</a>
-                </p>
+        <>
+            <NavBar />
+            <div className="bg-light d-flex align-items-center justify-content-center" style={{
+                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5))`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center center',
+                height: '100vh',
+                margin: 0,
+            }}>
+                <div className="card p-4">
+                    <form onSubmit={handleLogin}>
+                        <div className="form-group mt-3">
+                            <label htmlFor="emailLogin">Email:</label>
+                            <input type="text" id="emailLogin" className="form-control" placeholder="Enter your email address" name="email" onChange={(e) => setUser({ ...user, email: e.target.value?.trim() || '' })} />
+                            <span className="text-danger">{errors.email}</span>
+                        </div>
+                        <div className="form-group mt-3">
+                            <label htmlFor="passwordLogin">Password:</label>
+                            <input type="password" id="passwordLogin" className="form-control" placeholder="Enter your password" name="password" onChange={(e) => setUser({ ...user, password: e.target.value?.trim() || '' })} />
+                            <span className="text-danger">{errors.password}</span>
+                        </div>
+                        <div className="col text-center">
+                            <button type="submit" className="btn btn-primary mt-4">Login</button>
+                        </div>
+                    </form>
+                    <p className="mt-3 text-center">
+                        Don't have an account? <a href="/register">Register</a>
+                    </p>
+                </div>
+                <ToastContainer />
             </div>
-            <ToastContainer />
-        </div>
+        </>
     )
 
 }

@@ -4,5 +4,6 @@ export interface Book {
     genre: string;
     numberOfPages: number;
     numberOfCopies: number;
+    available: boolean;
     authorIds: number[];
 }

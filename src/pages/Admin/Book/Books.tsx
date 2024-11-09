@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import NavBar from '../../../components/NavBar';
 import { AuthorBook } from '../../../interfaces/Author';
 import { Book } from '../../../interfaces/Book';
 
@@ -72,32 +73,41 @@ function Books() {
     };
 
     return (
-        <div className="container mt-4">
-            {books.length === 0 ? (
-                <p>There are no books in the database right now.</p>
-            ) : (
-                <div className="row">
-                    {books.map((book) => (
-                        <div key={book.isbn} className="col-md-4 col-sm-6 mb-4">
-                            <div className="card p-4 h-100">
-                                <div className="form-group mt-3 text-center">
-                                    <h2>{book.title}</h2>
-                                    <p>Genre: {book.genre.toString()}</p>
-                                    <p>Number of pages: {book.numberOfPages}</p>
-                                    <p>In stock: {book.numberOfCopies}</p>
-                                    <p>Authors: {getAuthorNames(book.authorIds)}</p>
+        <>
+            <NavBar />
+            <div className="container mt-4">
+                {books.length === 0 ? (
+                    <>
+                        <p>There are no books in the database right now.</p>
+                        <button type="button" className="btn btn-success" onClick={() => navigate('/admin/books/add')}>Add</button>
+                    </>
+                ) : (
+                    <>
+                        <button type="button" className="btn btn-success" onClick={() => navigate('/admin/books/add')}>Add</button>
+                        <div className="row">
+                            {books.map((book) => (
+                                <div key={book.isbn} className="col-md-4 col-sm-6 mb-4">
+                                    <div className="card p-4 h-100">
+                                        <div className="form-group mt-3 text-center">
+                                            <h2>{book.title}</h2>
+                                            <p>Genre: {book.genre.toString()}</p>
+                                            <p>Number of pages: {book.numberOfPages}</p>
+                                            <p>In stock: {book.numberOfCopies}</p>
+                                            <p>Authors: {getAuthorNames(book.authorIds)}</p>
+                                        </div>
+                                        <div className="d-flex justify-content-around mt-4">
+                                            <button type="button" className="btn btn-secondary" onClick={() => navigate(`/admin/books/update/${book.isbn}`)}>Update</button>
+                                            <button type="button" className="btn btn-danger" onClick={() => removeBook(book.isbn)}>Remove</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="d-flex justify-content-around mt-4">
-                                    <button type="button" className="btn btn-secondary" onClick={() => navigate(`/admin/books/update/${book.isbn}`)}>Update</button>
-                                    <button type="button" className="btn btn-danger" onClick={() => removeBook(book.isbn)}>Remove</button>
-                                </div>
-                            </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
-            )}
-            <ToastContainer />
-        </div>
+                    </>
+                )}
+                <ToastContainer />
+            </div>
+        </>
     );
 }
 

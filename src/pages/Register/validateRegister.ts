@@ -46,11 +46,8 @@ export async function validateRegister(user: {
         errors.password = "The password cannot be larger than 255 characters."
     }
 
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!user.dateOfBirth) {
         errors.dateOfBirth = "You must enter your date of birth.";
-    } else if (!dateRegex.test(user.dateOfBirth)) {
-        errors.dateOfBirth = "Please enter a valid date (YYYY-MM-DD).";
     } else if (new Date(user.dateOfBirth) > new Date())
         errors.dateOfBirth = "The date of birth cannot be in the future."
 
