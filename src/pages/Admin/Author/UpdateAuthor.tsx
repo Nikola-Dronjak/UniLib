@@ -2,24 +2,24 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
+import { Author } from '../../../interfaces/Author';
 import { validateAuthor } from './validateAuthor';
 
 function UpdateAuthor() {
     const { authorId } = useParams();
+    const navigate = useNavigate();
 
-    const [author, setAuthor] = useState({
+    const [author, setAuthor] = useState<Author>({
         name: '',
         dateOfBirth: '',
         dateOfDeath: ''
-    })
+    });
 
     const [errors, setErrors] = useState<{
         name?: string;
         dateOfBirth?: string;
         dateOfDeath?: string;
     }>({});
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchAuthor = async () => {
@@ -61,7 +61,7 @@ function UpdateAuthor() {
                         navigate('/admin/authors');
                         setTimeout(() => {
                             toast.success("Author successfully updated.");
-                        }, 500);
+                        }, 10);
                     }
                 })
                 .catch((err) => {
@@ -111,8 +111,7 @@ function UpdateAuthor() {
             </div>
             <ToastContainer />
         </div>
-    )
-
+    );
 }
 
-export default UpdateAuthor
+export default UpdateAuthor;

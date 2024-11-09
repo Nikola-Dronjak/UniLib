@@ -1,34 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
+import axios from 'axios';
+import { AuthorBook } from '../../../interfaces/Author';
+import { Book } from '../../../interfaces/Book';
+import { BookGenre } from '../../../enums/BookGenre';
 import { validateBook } from './validateBook';
 
-function Book() {
-    enum BookGenre {
-        NOVEL = "Novel",
-        FICTION = "Fiction",
-        THRILLER = "Thriller",
-        HISTORY = "History",
-        ROMANCE = "Romance",
-        HORROR = "Horror"
-    }
+function AddBook() {
+    const navigate = useNavigate();
 
-    interface Author {
-        authorId: number;
-        name: string;
-    }
-
-    interface Book {
-        isbn: string;
-        title: string;
-        genre: string;
-        numberOfPages: number;
-        numberOfCopies: number;
-        authorIds: number[];
-    }
-
-    const [authors, setAuthors] = useState<Author[]>([]);;
+    const [authors, setAuthors] = useState<AuthorBook[]>([]);
 
     const [book, setBook] = useState<Book>({
         isbn: '',
@@ -85,7 +68,10 @@ function Book() {
             })
                 .then((response) => {
                     if (response.status === 200) {
-                        toast.success("Book successfully added.");
+                        navigate('/admin/books');
+                        setTimeout(() => {
+                            toast.success("Book successfully added.");
+                        }, 10);
                     }
                 })
                 .catch((err) => {
@@ -154,8 +140,7 @@ function Book() {
             </div>
             <ToastContainer />
         </div>
-    )
-
+    );
 }
 
-export default Book
+export default AddBook;

@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import axios from 'axios';
+import { Author } from '../../../interfaces/Author';
 import { validateAuthor } from './validateAuthor';
 
-function Author() {
-    const [author, setAuthor] = useState({
+function AddAuthor() {
+    const navigate = useNavigate();
+
+    const [author, setAuthor] = useState<Author>({
         name: '',
         dateOfBirth: '',
         dateOfDeath: ''
-    })
+    });
 
     const [errors, setErrors] = useState<{
         name?: string;
@@ -34,7 +38,10 @@ function Author() {
             })
                 .then((response) => {
                     if (response.status === 200) {
-                        toast.success("Author successfully added.");
+                        navigate('/admin/authors');
+                        setTimeout(() => {
+                            toast.success("Author successfully added.");
+                        }, 10);
                     }
                 })
                 .catch((err) => {
@@ -76,8 +83,7 @@ function Author() {
             </div>
             <ToastContainer />
         </div>
-    )
-
+    );
 }
 
-export default Author
+export default AddAuthor;

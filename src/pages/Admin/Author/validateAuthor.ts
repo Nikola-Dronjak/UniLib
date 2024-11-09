@@ -17,18 +17,13 @@ export async function validateAuthor(author: {
         errors.name = "The name of the author cannot be larger than 255 characters."
     }
 
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!author.dateOfBirth) {
         errors.dateOfBirth = "The author's date of birth is required.";
-    } else if (!dateRegex.test(author.dateOfBirth)) {
-        errors.dateOfBirth = "Please enter a valid date (YYYY-MM-DD).";
     } else if (new Date(author.dateOfBirth) > new Date())
         errors.dateOfBirth = "The author's date of birth cannot be in the future."
 
     if (!author.dateOfDeath) {
         errors.dateOfDeath = "The author's date of death is required.";
-    } else if (!dateRegex.test(author.dateOfDeath)) {
-        errors.dateOfDeath = "Please enter a valid date (YYYY-MM-DD).";
     } else if (new Date(author.dateOfDeath) > new Date())
         errors.dateOfDeath = "The author's date of death cannot be in the future."
 

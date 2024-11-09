@@ -2,36 +2,15 @@ import { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { AuthorBook } from '../../../interfaces/Author';
+import { Book } from '../../../interfaces/Book';
 
 function Books() {
-    interface Author {
-        authorId: number;
-        name: string;
-    }
+    const navigate = useNavigate();
 
-    enum BookGenre {
-        NOVEL = "Novel",
-        FICTION = "Fiction",
-        THRILLER = "Thriller",
-        HISTORY = "History",
-        ROMANCE = "Romance",
-        HORROR = "Horror"
-    }
-
-    interface Book {
-        isbn: string;
-        title: string;
-        genre: BookGenre;
-        numberOfPages: number;
-        numberOfCopies: number;
-        authorIds: number[];
-    }
-
-    const [authors, setAuthors] = useState<Author[]>([]);
+    const [authors, setAuthors] = useState<AuthorBook[]>([]);
 
     const [books, setBooks] = useState<Book[]>([]);
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchAuthors = async () => {
@@ -56,11 +35,6 @@ function Books() {
         fetchBooks();
     }, []);
 
-    const getAuthorNames = (authorIds: number[]): string => {
-        const authorNames = authorIds.map(id => authors.find(author => author.authorId === id)?.name).filter(name => name);
-        return authorNames.join(', ');
-    };
-
     const fetchBooks = async () => {
         try {
             const token = localStorage.getItem('authToken');
@@ -79,7 +53,7 @@ function Books() {
     const removeBook = async (isbn: string) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await axios.delete(`http://localhost:8080/api/books/${isbn}`, {
+            await axios.delete(`http://localhost:8080/api/books/${isbn}`, {
                 headers: {
                     'x-auth-token': token,
                     'Content-Type': 'application/json'
@@ -90,6 +64,11 @@ function Books() {
         } catch (error) {
             toast.error("Failed to remove book.");
         }
+    };
+
+    const getAuthorNames = (authorIds: number[]): string => {
+        const authorNames = authorIds.map(id => authors.find(author => author.authorId === id)?.name).filter(name => name);
+        return authorNames.join(', ');
     };
 
     return (
@@ -119,8 +98,7 @@ function Books() {
             )}
             <ToastContainer />
         </div>
-    )
-
+    );
 }
 
-export default Books
+export default Books;

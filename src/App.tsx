@@ -23,7 +23,7 @@ function App() {
         <Route path='/admin/books/add' element={<AddBook />} />
         <Route path='/admin/books/update/:isbn' element={<UpdateBook />} />
       </Routes>
-    </BrowserRouter >
+    </BrowserRouter>
   );
 }
 

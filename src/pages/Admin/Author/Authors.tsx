@@ -2,18 +2,12 @@ import { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { AuthorFull } from '../../../interfaces/Author';
 
 function Authors() {
-    interface Author {
-        authorId: number;
-        name: string;
-        dateOfBirth: string;
-        dateOfDeath: string;
-    }
-
-    const [authors, setAuthors] = useState<Author[]>([]);
-
     const navigate = useNavigate();
+
+    const [authors, setAuthors] = useState<AuthorFull[]>([]);
 
     useEffect(() => {
         fetchAuthors();
@@ -37,7 +31,7 @@ function Authors() {
     const removeAuthor = async (authorId: number) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await axios.delete(`http://localhost:8080/api/authors/${authorId}`, {
+            await axios.delete(`http://localhost:8080/api/authors/${authorId}`, {
                 headers: {
                     'x-auth-token': token,
                     'Content-Type': 'application/json'
@@ -79,8 +73,7 @@ function Authors() {
             )}
             <ToastContainer />
         </div>
-    )
-
+    );
 }
 
-export default Authors
+export default Authors;

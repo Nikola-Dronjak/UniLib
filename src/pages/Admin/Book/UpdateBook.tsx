@@ -3,35 +3,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import axios from 'axios';
+import { AuthorBook } from '../../../interfaces/Author';
+import { Book } from '../../../interfaces/Book';
+import { BookGenre } from '../../../enums/BookGenre';
 import { validateBook } from './validateBook';
 
 function UpdateBook() {
     const { isbn } = useParams();
+    const navigate = useNavigate();
 
-    enum BookGenre {
-        NOVEL = "Novel",
-        FICTION = "Fiction",
-        THRILLER = "Thriller",
-        HISTORY = "History",
-        ROMANCE = "Romance",
-        HORROR = "Horror"
-    }
-
-    interface Author {
-        authorId: number;
-        name: string;
-    }
-
-    interface Book {
-        isbn: string;
-        title: string;
-        genre: string;
-        numberOfPages: number;
-        numberOfCopies: number;
-        authorIds: number[];
-    }
-
-    const [authors, setAuthors] = useState<Author[]>([]);;
+    const [authors, setAuthors] = useState<AuthorBook[]>([]);
 
     const [book, setBook] = useState<Book>({
         isbn: '',
@@ -50,8 +31,6 @@ function UpdateBook() {
         numberOfCopies?: string;
         authors?: string;
     }>({});
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchBook = async () => {
@@ -176,8 +155,7 @@ function UpdateBook() {
             </div>
             <ToastContainer />
         </div>
-    )
-
+    );
 }
 
-export default UpdateBook
+export default UpdateBook;
