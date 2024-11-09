@@ -103,7 +103,7 @@ function AddBook() {
                     </div>
                     <div className="form-group mt-3">
                         <label htmlFor="genreBook">Genre:</label>
-                        <DropdownButton id="genreBook" title={"Please select a genre"} onSelect={(selectedGenre) => setBook({ ...book, genre: selectedGenre || "" })} variant="outline-secondary">
+                        <DropdownButton id="genreBook" title={book.genre ? BookGenre[book.genre as keyof typeof BookGenre] : "Please select a genre"} onSelect={(selectedGenre) => setBook({ ...book, genre: selectedGenre || "" })} variant="outline-secondary">
                             {Object.keys(BookGenre).map((genreKey) => (
                                 <Dropdown.Item key={genreKey} eventKey={genreKey}>
                                     {BookGenre[genreKey as keyof typeof BookGenre]}
