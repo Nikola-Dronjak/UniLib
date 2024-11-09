@@ -11,26 +11,37 @@ import UpdateAuthor from './pages/Admin/Author/UpdateAuthor';
 import Books from './pages/Admin/Book/Books';
 import AddBook from './pages/Admin/Book/AddBook';
 import UpdateBook from './pages/Admin/Book/UpdateBook';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route index element={<Navigate to="/home" replace />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/home' element={<Home />} />
-        <Route path='/profile' element={<Profile />} />
-        <Route path='/myBooks' element={<MyBooks />} />
-        <Route path='/admin/authors' element={<Authors />} />
-        <Route path='/admin/authors/add' element={<AddAuthor />} />
-        <Route path='/admin/authors/update/:authorId' element={<UpdateAuthor />} />
-        <Route path='/admin/books' element={<Books />} />
-        <Route path='/admin/books/add' element={<AddBook />} />
-        <Route path='/admin/books/update/:isbn' element={<UpdateBook />} />
-      </Routes>
-    </BrowserRouter>
-  );
+    const token = localStorage.getItem('authToken');
+    const userRole = token ? JSON.parse(atob(token.split('.')[1])).role : null;
+    const isAuthenticated = !!token;
+
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route index element={<Navigate to="/home" replace />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/home" element={<Home />} />
+
+                <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} allowedRoles={['STUDENT']} userRole={userRole} />}>
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/myBooks" element={<MyBooks />} />
+                </Route>
+
+                <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} allowedRoles={['ADMINISTRATOR']} userRole={userRole} />}>
+                    <Route path="/admin/authors" element={<Authors />} />
+                    <Route path="/admin/authors/add" element={<AddAuthor />} />
+                    <Route path="/admin/authors/update/:authorId" element={<UpdateAuthor />} />
+                    <Route path="/admin/books" element={<Books />} />
+                    <Route path="/admin/books/add" element={<AddBook />} />
+                    <Route path="/admin/books/update/:isbn" element={<UpdateBook />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;
