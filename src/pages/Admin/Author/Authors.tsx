@@ -68,7 +68,7 @@ function Authors() {
                                     <div className="card p-4 h-100">
                                         <div className="form-group mt-3 text-center">
                                             <h2>{author.name}</h2>
-                                            <p>{formatDate(author.dateOfBirth)} - {formatDate(author.dateOfDeath)}</p>
+                                            <p>{formatDate(author.dateOfBirth)} - {author.dateOfDeath === null ? "Present" : formatDate(author.dateOfDeath)}</p>
                                         </div>
                                         <div className="d-flex justify-content-around mt-4">
                                             <button type="button" className="btn btn-secondary" onClick={() => navigate(`/admin/authors/update/${author.authorId}`)}>Update</button>

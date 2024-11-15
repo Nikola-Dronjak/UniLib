@@ -22,10 +22,5 @@ export async function validateAuthor(author: {
     } else if (new Date(author.dateOfBirth) > new Date())
         errors.dateOfBirth = "The author's date of birth cannot be in the future."
 
-    if (!author.dateOfDeath) {
-        errors.dateOfDeath = "The author's date of death is required.";
-    } else if (new Date(author.dateOfDeath) > new Date())
-        errors.dateOfDeath = "The author's date of death cannot be in the future."
-
     return errors;
 }
