@@ -90,9 +90,8 @@ function MyBooks() {
             });
             toast.success(`You have sucessfully returned ${title}.`);
             fetchMyBooks();
-        } catch (error) {
-            console.log(error)
-            toast.error("An error occured durring the book returning process.");
+        } catch (error: any) {
+            toast.error(error.response.data);
         }
     }
 

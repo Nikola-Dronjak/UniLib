@@ -84,9 +84,11 @@ function Home() {
             });
             toast.success(`You have sucessfully loaned ${title}.`);
             fetchBooks();
-        } catch (error) {
+        } catch (error: any) {
+            if (error.response.data === "There is an active book loan for the given userId and bookISBN combination. You cannot loan the same book twice. Please return the book first.")
+                toast.error("You have already loaned this book out.");
+
             console.log(error)
-            toast.error("An error occured durring the book loaning process.");
         }
     }
 
