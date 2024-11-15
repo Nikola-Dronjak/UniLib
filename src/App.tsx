@@ -39,8 +39,11 @@ function App() {
                 <Route path="/login" element={<Login setAuthState={setAuthState} />} />
                 <Route path="/home" element={<Home />} />
 
-                <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} allowedRoles={['STUDENT']} userRole={userRole} />}>
+                <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} allowedRoles={['STUDENT', 'ADMINISTRATOR']} userRole={userRole} />}>
                     <Route path="/profile" element={<Profile />} />
+                </Route>
+
+                <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} allowedRoles={['STUDENT']} userRole={userRole} />}>
                     <Route path="/myBooks" element={<MyBooks />} />
                 </Route>
 
